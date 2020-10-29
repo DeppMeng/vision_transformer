@@ -2,4 +2,6 @@
 __pycache__/
 /.vscode
 /.env
-/.pretrained_models
+pretrained_models/
+log/
+output/
