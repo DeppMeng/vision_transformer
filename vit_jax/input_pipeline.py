@@ -104,7 +104,6 @@ def get_data(*,
       download_config=tfds.download.DownloadConfig(manual_dir=tfds_manual_dir))
   data = data_builder.as_dataset(
       split=split, decoders={'image': tfds.decode.SkipDecoding()})
-  data = data.apply(tf.data.experimental.ignore_errors())
   decoder = data_builder.info.features['image'].decode_example
 
   def _pp(data):
@@ -139,6 +138,7 @@ def get_data(*,
     data = data.shuffle(min(dataset_info['num_examples'], MAX_IN_MEMORY))
   data = data.map(_pp, tf.data.experimental.AUTOTUNE)
   data = data.batch(batch_size, drop_remainder=True)
+  data = data.apply(tf.data.experimental.ignore_errors())
 
   def _mixup(data):
     beta_dist = tfp.distributions.Beta(mixup_alpha, mixup_alpha)
